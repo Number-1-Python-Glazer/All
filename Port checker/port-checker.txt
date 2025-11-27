@@ -1,16 +1,17 @@
 import socket
-
+ 
 # Ask the user for the target host name or IP address
 host = input("Enter the host: ")
 
 # Ask the user for the TCP port number to check
-port_input = input("Enter the port: ")
+port_input = input("Enter the port: ")   
 
 # Convert the provided port text into an integer
 port = int(port_input)
 
 # Create a TCP socket for the connection test
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  
+
 
 # Keep the attempt from hanging forever by setting a short timeout
 sock.settimeout(3)
