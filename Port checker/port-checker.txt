@@ -1,0 +1,28 @@
+import socket
+
+# Ask the user for the target host name or IP address
+host = input("Enter the host: ")
+
+# Ask the user for the TCP port number to check
+port_input = input("Enter the port: ")
+
+# Convert the provided port text into an integer
+port = int(port_input)
+
+# Create a TCP socket for the connection test
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Keep the attempt from hanging forever by setting a short timeout
+sock.settimeout(3)
+
+try:
+    # Try connecting to the requested host and port
+    sock.connect((host, port))
+    # Let the user know the port accepted the connection
+    print("Port is open.")
+except Exception:
+    # Tell the user the port could not be reached
+    print("Port is closed.")
+finally:
+    # Always free up the socket resources when finished
+    sock.close()
