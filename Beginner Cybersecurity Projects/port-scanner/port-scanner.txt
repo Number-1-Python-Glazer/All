@@ -1,0 +1,75 @@
+"""
+likkle port scanner for beginners (aka me at this current stage)
+Asks for a host, a port range, and prints any open ports.
+"""
+
+import socket
+
+
+def get_host(): 
+    """Ask for a host name or IP and try to resolve it."""
+    host = input("Target host or IP: ").strip()
+    if not host:
+        raise ValueError("Please type something for the host.")
+    try:
+        ip_address = socket.gethostbyname(host)
+    except socket.gaierror:
+        raise ValueError("Could not resolve that host. Pls Try again.")
+    return host, ip_address
+,
+
+def get_port_range():
+    """Ask for the start and end ports and make sure they make sense."""
+    start_raw = input("Start port: ").strip()
+    end_raw = input("End port: ").strip()
+    try:
+        start_port = int(start_raw)
+        end_port = int(end_raw)
+    except ValueError:
+        raise ValueError("Ports must be whole numbers.")
+
+    if start_port < 1 or end_port > 65535:
+        raise ValueError("Ports must be between 1 and 65535.")
+    if start_port > end_port:
+        raise ValueError("Start port must be smaller or equal to end port.")
+    return start_port, end_port
+
+,
+
+
+def check_port(ip_address, port, timeout=0.3):
+    """Return True if the port is open, else False."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(timeout)
+        return sock.connect_ex((ip_address, port)) == 0  ,
+
+,
+def main():
+    # Simple header so the user knows what this is.
+    print("\nSimple Port Scanner")
+    print("-------------------")
+    try:
+        host, ip_address = get_host()
+        start_port, end_port = get_port_range()
+    except ValueError as error:
+        print(f"Error: {error}")
+        return
+-
+    print(f"\nScanning {host} ({ip_address}) from {start_port} to {end_port}\n")
+    open_ports = []
+
+    for port in range(start_port, end_port + 1):
+        if check_port(ip_address, port):
+            print(f"Port {port} is OPEN")
+            open_ports.append(port)
+--
+    print("\nDone scanning.")
+    if open_ports:
+        print(f"Found {len(open_ports)} open port(s): {', '.join(str(p) for p in open_ports)}")
+    else:
+        print("No open ports found in that range.")
+
+
+
+if __name__ == "__main__":
+    main()
