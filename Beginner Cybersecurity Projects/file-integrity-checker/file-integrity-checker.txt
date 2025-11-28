@@ -1,0 +1,92 @@
+""" Tiny file checker that remembers a file's fingerprint.,
+
+Run this when you want to see if a file changed since last time.
+"""
+
+  
+import hashlib 
+import json
+from pathlib import Path
+,
+# Save fingerprints next to this script
+STORE_FILE = Path(__file__).resolve().parent / "integrity_store.json"
+
+
+def calculate_hash(file_path, chunk_size=4096):  
+    """Make a simple code for the file by reading it in pieces."""
+    digest = hashlib.sha256()
+
+    with open(file_path, "rb") as file:
+        while True:
+            chunk = file.read(chunk_size)
+            if not chunk:
+                break
+            digest.update(chunk)
+
+    return digest.hexdigest()
+
+
+def  load_store():
+    """Get saved fingerprints from the JSON file."""
+    if not STORE_FILE.exists():
+        return {}
+
+    try:
+        with open(STORE_FILE, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except (json.JSONDecodeError, OSError):
+        # Start over if the file is broken
+        return {}
+
+
+def save_store(store):
+    """Keep fingerprints on disk."""
+    with open(STORE_FILE, "w", encoding="utf-8") as file:
+        json.dump(store, file, indent=2)
+
+-
+def check_file(file_path):
+    """Enroll a file the first time, then warn if it changes."""
+    file_path = Path(file_path)
+
+    if not file_path.exists():
+        print("That file was not found. Check the path and try again.")
+        return
+
+    if not file_path.is_file():
+        print("This path is not a file. Please enter a real file path.")
+        return
+
+    try:
+        current_hash = calculate_hash(file_path)
+    except PermissionError:
+        print("I could not read the file because of permissions.")
+        return
+    except OSError as error:
+        print(f"Could not read the file: {error}")
+        return
+
+    store = load_store()
+    file_key = str(file_path.resolve())
+
+    if file_key not in store:
+        store[file_key] = current_hash
+        save_store(store)
+        print("Saved as the baseline copy. I will remember this version.")
+    else:
+        old_hash = store[file_key]
+        if old_hash == current_hash:
+            print("The file looks the same as before.")
+        else:
+            print("Heads up! The file content changed since last time.")
+
+--
+if __name__ == "__main__":
+    path_text = input("Enter the path to the file you want to check: ").strip()  
+
+    if not path_text:
+        print("No path given. Please run the script again with a file path.")
+    else:
+        check_file(path_text)
+
+        ,
