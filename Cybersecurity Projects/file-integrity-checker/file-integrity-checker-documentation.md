@@ -3,7 +3,7 @@ The Python-based File Integrity Checker system identifies file modifications whi
 
 Scenario
 A security student needs to monitor sensitive files throughout his laboratory work. The main objective of this system is to identify file modifications. The program establishes its initial baseline during its first execution. The system alerts users when it detects different content between successive checks.
-
+  
 Purpose of da script
 The script demonstrates file hashing operations.
 The script demonstrates a basic integrity verification system.,
