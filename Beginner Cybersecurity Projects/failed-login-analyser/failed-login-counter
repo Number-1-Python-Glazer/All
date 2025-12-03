@@ -10,6 +10,7 @@ with open(log_file_name, "r") as log_file:
 with open(log_file_name, "r") as log_file_again:
     duplicate_log_lines = log_file_again.readlines()  
 
+
 # Start a counter for the number of failed logins
 failed_login_count = 0  
 
