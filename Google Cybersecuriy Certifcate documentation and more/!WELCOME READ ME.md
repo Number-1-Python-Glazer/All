@@ -1,4 +1,4 @@
-Welcome , here will be mainly just the documentation from different labs ive done at the google cybersecurity course , this course entails:
+Welcome , here will be mainly just the documentation from different labs ive done (and just documentation in general) at the google cybersecurity course , this course entails:
 
 COURSE 1. FOUNDATIONS OF CYBERSECURITY
 A course focused on the core principles of cybersecurity. It outlines security concepts, common threats, basic risk ideas, and the general responsibilities carried by security analysts.
